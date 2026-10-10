@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Colors — section 5 of the brief */
+  --color-bg: #FFFFFF;
+  --color-text-primary: #0A0A0A;
+  --color-text-secondary: #555555;
+  --color-border: #E5E5E5;
+  --color-accent: #E21B23; /* placeholder — swap when exact logo red is supplied */
+
+  /* Typography — section 7-9 of the brief */
+  --font-sans: 'Manrope', sans-serif;
+  --font-serif: 'DM Serif Display', serif;
+
+  --text-hero: clamp(3rem, 9vw, 9.375rem);       /* 48px – 150px */
+  --text-heading: clamp(3rem, 6vw, 6rem);         /* 48px – 96px */
+  --text-statement: clamp(2.5rem, 5vw, 4.5rem);   /* 40px – 72px */
+  --text-card: clamp(1.5rem, 3vw, 2.5rem);        /* 24px – 40px */
+  --text-body: clamp(1rem, 1.2vw, 1.25rem);       /* 16px – 20px */
+  --text-small: clamp(0.75rem, 1vw, 0.9375rem);   /* 12px – 15px */
+
+  /* Spacing — section 12 of the brief, base unit 4px */
+  --spacing-4: 0.25rem;
+  --spacing-8: 0.5rem;
+  --spacing-12: 0.75rem;
+  --spacing-16: 1rem;
+  --spacing-24: 1.5rem;
+  --spacing-32: 2rem;
+  --spacing-48: 3rem;
+  --spacing-64: 4rem;
+  --spacing-80: 5rem;
+  --spacing-96: 6rem;
+  --spacing-120: 7.5rem;
+  --spacing-160: 10rem;
+  --spacing-200: 12.5rem;
+
+  /* Container — section 11 of the brief */
+  --container-max: 1440px;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+
+html, body {
+  background-color: var(--color-text-primary); /* dark, matches your sections */
+}
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}
