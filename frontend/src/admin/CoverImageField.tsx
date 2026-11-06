@@ -18,7 +18,7 @@ type Props = {
 };
 
 const btn =
-  "border border-neutral-950 px-4 py-2 text-xs font-semibold tracking-widest disabled:opacity-50";
+  "rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white/15 disabled:opacity-50";
 
 function release(cover: CoverState) {
   if (!cover) return;
@@ -96,10 +96,6 @@ export default function CoverImageField({ value, onChange, disabled }: Props) {
 
   return (
     <div>
-      <span className="block text-xs font-semibold tracking-widest text-neutral-500">
-        COVER IMAGE
-      </span>
-
       <input
         ref={inputRef}
         type="file"
@@ -109,9 +105,9 @@ export default function CoverImageField({ value, onChange, disabled }: Props) {
       />
 
       {value ? (
-        <div className="mt-2">
+        <div>
           <div
-            className="w-full max-w-xl overflow-hidden border border-neutral-200 bg-neutral-100"
+            className="w-full overflow-hidden rounded-2xl bg-black/30 ring-1 ring-white/10"
             style={{ aspectRatio: COVER_ASPECT }}
           >
             <img
@@ -120,12 +116,12 @@ export default function CoverImageField({ value, onChange, disabled }: Props) {
               className="h-full w-full object-cover"
             />
           </div>
-          <p className="mt-2 text-xs text-neutral-500">
-            This is how the cover will appear on the website.
+          <p className="mt-2 text-xs text-white/45">
+            This is how the cover appears on the website.
           </p>
-          <div className="mt-3 flex flex-wrap gap-3">
+          <div className="mt-3 flex flex-wrap gap-2">
             <button type="button" onClick={startRecrop} disabled={disabled} className={btn}>
-              CROP
+              Crop
             </button>
             <button
               type="button"
@@ -133,15 +129,15 @@ export default function CoverImageField({ value, onChange, disabled }: Props) {
               disabled={disabled}
               className={btn}
             >
-              REPLACE
+              Replace
             </button>
             <button
               type="button"
               onClick={handleDelete}
               disabled={disabled}
-              className={`${btn} !border-[#e31d25] text-[#e31d25]`}
+              className={`${btn} !text-red-400 hover:!bg-red-500/10`}
             >
-              DELETE
+              Delete
             </button>
           </div>
         </div>
@@ -151,13 +147,13 @@ export default function CoverImageField({ value, onChange, disabled }: Props) {
           onClick={() => inputRef.current?.click()}
           disabled={disabled}
           style={{ aspectRatio: COVER_ASPECT }}
-          className="mt-2 flex w-full max-w-xl items-center justify-center border-2 border-dashed border-neutral-300 text-sm font-semibold tracking-widest text-neutral-500 hover:border-neutral-950 disabled:opacity-50"
+          className="flex w-full items-center justify-center rounded-2xl border-2 border-dashed border-white/25 text-sm font-semibold text-white/60 hover:border-white/50 hover:text-white disabled:opacity-50"
         >
-          + UPLOAD COVER IMAGE
+          + Upload cover image
         </button>
       )}
 
-      {error && <p className="mt-2 text-sm text-[#e31d25]">{error}</p>}
+      {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
 
       {pending && (
         <ImageCropper

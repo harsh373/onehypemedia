@@ -27,4 +27,12 @@ export const env = {
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY as string,
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET as string,
   googleClientId: process.env.GOOGLE_CLIENT_ID ?? "",
+  // Email is optional: if these are missing the server still starts,
+  // and the blast endpoints answer 503.
+  smtpHost: process.env.SMTP_HOST ?? "",
+  smtpPort: Number(process.env.SMTP_PORT) || 465,
+  smtpUser: process.env.SMTP_USER ?? "",
+  smtpPass: process.env.SMTP_PASS ?? "",
+  mailFrom: process.env.MAIL_FROM ?? "",
+  adminEmail: process.env.ADMIN_EMAIL ?? "",
 };

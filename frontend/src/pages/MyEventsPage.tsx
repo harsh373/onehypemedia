@@ -1,6 +1,7 @@
 import { useEffect, useState, type CSSProperties } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import Container from '../components/Container'
+import { formatEventWhen } from '../api/events'
 import { getMyEvents, type MyEventItem, type MyEvents } from '../api/participation'
 import { useUserAuth } from '../auth/authContext'
 
@@ -13,6 +14,9 @@ const gridStyle: CSSProperties = {
   WebkitMaskImage: 'linear-gradient(to bottom, black, transparent 85%)',
 }
 
+// The server now also sends these two fields for each event.
+type TimeFields = { endDate?: string | null; timezone?: string }
+
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <main style={{ paddingTop: 150, paddingBottom: 64 }} className="relative min-h-screen overflow-hidden bg-white text-neutral-950">
@@ -24,16 +28,14 @@ function Shell({ children }: { children: React.ReactNode }) {
   )
 }
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
-}
-
 function EventRow({ item, muted }: { item: MyEventItem; muted?: boolean }) {
+  const event = item.event as typeof item.event & TimeFields
   return (
     <Link to={`/hype-lab/${item.event.slug}`} className="block border border-neutral-200 bg-white transition-colors hover:border-neutral-950" style={{ padding: 20 }}>
-      <p className={`text-[11px] font-semibold tracking-[0.2em] ${muted ? 'text-neutral-400' : 'text-[#e31d25]'}`}>{formatDate(item.event.date).toUpperCase()}</p>
+      <p className={`text-[11px] font-semibold tracking-[0.2em] ${muted ? 'text-neutral-400' : 'text-[#e31d25]'}`}>{formatEventWhen(event).toUpperCase()}</p>
       <p className={`text-lg font-extrabold uppercase leading-tight tracking-tight ${muted ? 'text-neutral-500' : 'text-neutral-950'}`} style={{ marginTop: 8 }}>{item.event.title}</p>
       {item.event.location && <p className="text-sm text-neutral-500" style={{ marginTop: 6 }}>{item.event.location}</p>}
+      {item.status === 'pending' && <p className="text-[11px] font-semibold tracking-[0.2em] text-neutral-500" style={{ marginTop: 10 }}>WAITING FOR APPROVAL</p>}
     </Link>
   )
 }

@@ -37,7 +37,7 @@ type Props = {
 };
 
 const smallBtn =
-  "border border-neutral-950 px-2 py-1 text-[11px] font-semibold tracking-widest disabled:opacity-50";
+  "rounded-md bg-white/10 px-2 py-1 text-[11px] font-semibold transition-colors hover:bg-white/15 disabled:opacity-50";
 
 function releaseItem(item: GalleryItem) {
   if (item.previewUrl.startsWith("blob:")) URL.revokeObjectURL(item.previewUrl);
@@ -88,10 +88,10 @@ function Tile({ item, index, disabled, onCrop, onReplace, onDelete }: TileProps)
     <li
       ref={setNodeRef}
       style={style}
-      className="border border-neutral-200 bg-white"
+      className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.04]"
     >
       <div
-        className="relative overflow-hidden bg-neutral-100"
+        className="relative overflow-hidden bg-white/5"
         style={{ aspectRatio: GALLERY_ASPECT }}
       >
         <img
@@ -100,11 +100,11 @@ function Tile({ item, index, disabled, onCrop, onReplace, onDelete }: TileProps)
           draggable={false}
           className="h-full w-full object-cover"
         />
-        <span className="absolute left-2 top-2 bg-neutral-950 px-2 py-1 text-xs font-semibold text-white">
+        <span className="absolute left-2 top-2 rounded-md bg-black/70 px-2 py-0.5 text-xs font-semibold text-white">
           {index + 1}
         </span>
       </div>
-      <div className="flex flex-wrap gap-2 p-2">
+      <div className="flex flex-wrap gap-1.5 p-2">
         <button
           type="button"
           ref={setActivatorNodeRef}
@@ -112,23 +112,23 @@ function Tile({ item, index, disabled, onCrop, onReplace, onDelete }: TileProps)
           {...listeners}
           disabled={disabled}
           aria-label="Drag to reorder"
-          className={`${smallBtn} cursor-grab touch-none bg-neutral-950 text-white`}
+          className="cursor-grab touch-none rounded-md bg-white px-2 py-1 text-[11px] font-semibold text-neutral-950 transition-colors hover:bg-white/90 disabled:opacity-50"
         >
-          DRAG
+          Drag
         </button>
         <button type="button" onClick={onCrop} disabled={disabled} className={smallBtn}>
-          CROP
+          Crop
         </button>
         <button type="button" onClick={onReplace} disabled={disabled} className={smallBtn}>
-          REPLACE
+          Replace
         </button>
         <button
           type="button"
           onClick={onDelete}
           disabled={disabled}
-          className={`${smallBtn} !border-[#e31d25] text-[#e31d25]`}
+          className="rounded-md px-2 py-1 text-[11px] font-semibold text-red-400 transition-colors hover:bg-red-400/10 disabled:opacity-50"
         >
-          DELETE
+          Delete
         </button>
       </div>
     </li>
@@ -290,17 +290,20 @@ export default function GalleryField({ items, onChange, disabled }: Props) {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <span className="block text-xs font-semibold tracking-widest text-neutral-500">
-          EVENT PHOTOS ({items.length} / {MAX_GALLERY_IMAGES})
-        </span>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-semibold">Event Photos</h2>
+          <p className="text-sm text-white/45">
+            {items.length} / {MAX_GALLERY_IMAGES}
+          </p>
+        </div>
         <button
           type="button"
           onClick={() => addRef.current?.click()}
           disabled={locked || items.length >= MAX_GALLERY_IMAGES}
-          className="border border-neutral-950 px-4 py-2 text-xs font-semibold tracking-widest disabled:opacity-50"
+          className="rounded-lg bg-white/10 px-4 py-2 text-sm font-semibold transition-colors hover:bg-white/15 disabled:opacity-50"
         >
-          {busy ? "PREPARING PHOTOS..." : "+ UPLOAD PHOTOS"}
+          {busy ? "Preparing photos..." : "+ Upload photos"}
         </button>
       </div>
 
@@ -320,16 +323,17 @@ export default function GalleryField({ items, onChange, disabled }: Props) {
         className="hidden"
       />
 
-      {error && <p className="mt-3 text-sm text-[#e31d25]">{error}</p>}
+      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
 
       {items.length === 0 ? (
-        <p className="mt-4 text-sm text-neutral-500">
-          No photos yet. Photos are optional.
-        </p>
+        <div className="mt-4 rounded-2xl border border-dashed border-white/15 px-6 py-10 text-center">
+          <p className="text-sm font-semibold text-white/80">No photos yet</p>
+          <p className="mt-1 text-sm text-white/50">Photos are optional.</p>
+        </div>
       ) : (
         <>
-          <p className="mt-3 text-xs text-neutral-500">
-            Drag the DRAG handle to reorder. The order here is the order on the
+          <p className="mt-3 text-xs text-white/45">
+            Drag the Drag handle to reorder. The order here is the order on the
             website.
           </p>
           <DndContext

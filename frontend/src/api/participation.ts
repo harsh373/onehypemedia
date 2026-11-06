@@ -1,10 +1,16 @@
 import { http, getErrorMessage } from './http'
 
-export type ParticipationStatus = 'registered' | 'cancelled' | null
+// "registered" means confirmed. "pending" is waiting for the host to approve.
+export type ParticipationStatus =
+  | 'registered'
+  | 'pending'
+  | 'declined'
+  | 'cancelled'
+  | null
 
 export type MyEventItem = {
   id: string
-  status: string
+  status: 'registered' | 'pending'
   registeredAt: string
   event: {
     id: string

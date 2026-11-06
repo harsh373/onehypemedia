@@ -8,8 +8,8 @@ type Props = {
 
 type Result = { users: AdminUser[] } | { error: string } | null;
 
-const th = { padding: "10px 12px", textAlign: "left" as const, whiteSpace: "nowrap" as const };
-const td = { padding: "12px", whiteSpace: "nowrap" as const };
+const th = "px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-white/45 whitespace-nowrap";
+const td = "px-4 py-3 whitespace-nowrap";
 
 export default function UsersList({ onOpenUser }: Props) {
   const [result, setResult] = useState<Result>(null);
@@ -30,11 +30,11 @@ export default function UsersList({ onOpenUser }: Props) {
   }, []);
 
   if (result === null) {
-    return <p className="text-neutral-500">Loading users...</p>;
+    return <p className="text-white/55">Loading users...</p>;
   }
 
   if ("error" in result) {
-    return <p className="text-sm text-[#e31d25]">{result.error}</p>;
+    return <p className="text-sm text-red-400">{result.error}</p>;
   }
 
   const q = query.trim().toLowerCase();
@@ -49,39 +49,65 @@ export default function UsersList({ onOpenUser }: Props) {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between" style={{ gap: 16 }}>
-        <h1 className="text-2xl font-extrabold tracking-tight">USERS ({result.users.length})</h1>
-        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search name, username, email" className="w-full border border-neutral-300 px-4 py-2 text-sm outline-none focus:border-neutral-950 sm:w-72" />
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-3xl font-semibold tracking-tight">
+          Users{" "}
+          <span className="text-xl font-normal text-white/45">
+            {result.users.length}
+          </span>
+        </h1>
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search name, username, email"
+          className="w-full rounded-lg bg-white/10 px-3 py-2 text-sm text-white outline-none ring-1 ring-transparent placeholder:text-white/40 focus:ring-white/30 sm:w-72"
+        />
       </div>
 
       {users.length === 0 ? (
-        <p className="text-neutral-500" style={{ marginTop: 32 }}>
-          {result.users.length === 0 ? "No users have registered yet." : "No users match your search."}
-        </p>
+        <div className="mt-6 rounded-2xl border border-dashed border-white/15 px-6 py-12 text-center">
+          <p className="text-lg font-semibold text-white/80">
+            {result.users.length === 0 ? "No Users Yet" : "No Matches"}
+          </p>
+          <p className="mt-1 text-sm text-white/50">
+            {result.users.length === 0
+              ? "People who register on the site will show up here."
+              : "Try a different name, username or email."}
+          </p>
+        </div>
       ) : (
-        <div className="overflow-x-auto border border-neutral-200" style={{ marginTop: 24 }}>
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.04]">
           <table className="w-full text-sm">
-            <thead className="bg-neutral-50 text-xs font-semibold tracking-widest text-neutral-500">
+            <thead className="border-b border-white/10">
               <tr>
-                <th style={th}>NAME</th>
-                <th style={th}>USERNAME</th>
-                <th style={th}>EMAIL</th>
-                <th style={th}>PHONE</th>
-                <th style={th}>JOINED</th>
-                <th style={th}>EVENTS</th>
+                <th className={th}>Name</th>
+                <th className={th}>Username</th>
+                <th className={th}>Email</th>
+                <th className={th}>Phone</th>
+                <th className={th}>Joined</th>
+                <th className={th}>Events</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-white/10">
               {users.map((u) => (
-                <tr key={u.id} className="border-t border-neutral-200">
-                  <td style={td}>
-                    <button onClick={() => onOpenUser(u.id)} className="font-semibold underline">{u.name}</button>
+                <tr key={u.id} className="transition-colors hover:bg-white/[0.04]">
+                  <td className={td}>
+                    <button
+                      type="button"
+                      onClick={() => onOpenUser(u.id)}
+                      className="font-semibold hover:underline"
+                    >
+                      {u.name}
+                    </button>
                   </td>
-                  <td style={td}>@{u.username}</td>
-                  <td style={td}>{u.email}</td>
-                  <td style={td}>{u.phone || "-"}</td>
-                  <td style={td}>{formatEventDate(u.createdAt)}</td>
-                  <td style={td}>{u.registeredCount}</td>
+                  <td className={`${td} text-white/70`}>@{u.username}</td>
+                  <td className={`${td} text-white/70`}>{u.email}</td>
+                  <td className={`${td} text-white/70`}>{u.phone || "-"}</td>
+                  <td className={`${td} text-white/70`}>
+                    {formatEventDate(u.createdAt)}
+                  </td>
+                  <td className={td}>{u.registeredCount}</td>
                 </tr>
               ))}
             </tbody>

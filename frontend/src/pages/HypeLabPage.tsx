@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Container from '../components/Container'
 import Footer from '../components/Footer'
-import { formatEventDate, getPastEvents } from '../api/events'
+import { formatEventWhen, getPastEvents } from '../api/events'
 import type { EventRecord } from '../api/events'
 import { COVER_ASPECT, imageUrl } from '../api/images'
 
@@ -84,7 +84,7 @@ export default function HypeLabPage() {
                       {event.coverImage && <img src={imageUrl(event.coverImage, 800)} alt={event.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />}
                     </div>
                     <div className="flex flex-col gap-1">
-                      <p className="text-xs font-semibold uppercase tracking-[0.15em] text-neutral-500">{formatEventDate(event.date)} · {event.location}</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.15em] text-neutral-500">{formatEventWhen(event)} · {event.location}</p>
                       <h2 className="text-2xl font-extrabold uppercase leading-tight tracking-tight transition-colors group-hover:text-[#e31d25]">{event.title}</h2>
                     </div>
                   </Link>

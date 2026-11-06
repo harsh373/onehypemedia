@@ -22,7 +22,8 @@
     "express-session": "^1.19.0",
     "google-auth-library": "^11.1.0",
     "helmet": "^8.3.0",
-    "mongoose": "^9.10.2"
+    "mongoose": "^9.10.2",
+    "nodemailer": "^10.2.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -30,6 +31,7 @@
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.19.0",
     "@types/node": "^26.6.3",
+    "@types/nodemailer": "^8.0.2",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }

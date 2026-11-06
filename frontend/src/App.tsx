@@ -42,7 +42,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/u/:username" element={<PublicProfilePage />} />
         <Route path="/my-events" element={<MyEventsPage />} />
-        <Route path="/adminn" element={<AdminPage />} />
+        <Route path="/adminn/*" element={<AdminPage />} />
       </Routes>
     </UserAuthProvider>
   )

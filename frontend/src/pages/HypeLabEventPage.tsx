@@ -4,15 +4,19 @@ import axios from 'axios'
 import Container from '../components/Container'
 import Lightbox from '../components/Lightbox'
 import ParticipateButton from '../components/ParticipateButton'
-import { formatEventDate, getEventBySlug } from '../api/events'
+import { formatEventWhen, getEventBySlug } from '../api/events'
 import type { EventRecord } from '../api/events'
 import { COVER_ASPECT, GALLERY_ASPECT, imageUrl } from '../api/images'
+import { isBeforeTodayIST } from '../api/istDay'
+import { getTheme } from '../admin/eventTheme'
 
 const gridStyle = {
   backgroundColor: '#ffffff',
   backgroundImage: 'linear-gradient(to right, rgba(10,10,10,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(10,10,10,0.05) 1px, transparent 1px)',
   backgroundSize: '80px 80px',
 }
+
+const cardLabel = 'text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-400'
 
 type State = {
   slug: string
@@ -21,10 +25,8 @@ type State = {
   notFound: boolean
 }
 
-function isPastEvent(iso: string): boolean {
-  const startOfToday = new Date()
-  startOfToday.setUTCHours(0, 0, 0, 0)
-  return new Date(iso) < startOfToday
+function mapUrl(lat: number, lng: number): string {
+  return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`
 }
 
 export default function HypeLabEventPage() {
@@ -71,9 +73,14 @@ export default function HypeLabEventPage() {
     setAttempt((a) => a + 1)
   }
 
-  const isUpcoming = event ? !isPastEvent(event.date) : false
+  const ended = event ? isBeforeTodayIST(event.date) : false
+  const isUpcoming = event ? !ended : false
   const backTo = isUpcoming ? '/upcoming-events' : '/hype-lab'
   const backLabel = isUpcoming ? '← Upcoming events' : '← All events'
+
+  const isOnline = event?.locationType === 'online'
+  const theme = getTheme(event?.theme)
+  const pin = event && typeof event.lat === 'number' && typeof event.lng === 'number' ? { lat: event.lat, lng: event.lng } : null
 
   const usingCover = event ? event.gallery.length === 0 : false
   const photos = event ? (event.gallery.length > 0 ? event.gallery : event.coverImage ? [event.coverImage] : []) : []
@@ -109,14 +116,45 @@ export default function HypeLabEventPage() {
             <article className="flex flex-col gap-14">
               <header className="flex max-w-3xl flex-col gap-4">
                 <h1 className="break-words text-4xl font-extrabold uppercase leading-[1] tracking-[-0.03em] sm:text-5xl">{event.title}</h1>
-                <p className="text-sm font-semibold uppercase tracking-[0.15em] text-neutral-500">{formatEventDate(event.date)} · {event.location}</p>
                 <p className="whitespace-pre-line text-base leading-relaxed text-neutral-600 md:text-lg">{event.description}</p>
-                <div className="pt-2">
-                  {isPastEvent(event.date) ? (
-                    <p className="text-sm font-semibold uppercase tracking-[0.15em] text-neutral-400">This event has ended.</p>
-                  ) : (
-                    <ParticipateButton eventId={event._id} />
-                  )}
+
+                <div
+                  className="mt-2 flex max-w-xl flex-col gap-6 border border-neutral-950 bg-white p-6 sm:p-8"
+                  style={{ borderTop: `4px solid ${theme.swatch}` }}
+                >
+                  <div>
+                    <p className={cardLabel}>When</p>
+                    <p className="mt-1 text-base font-semibold text-neutral-950">{formatEventWhen(event)}</p>
+                  </div>
+
+                  <div>
+                    <p className={cardLabel}>Where</p>
+                    <p className="mt-1 text-base font-semibold text-neutral-950">{isOnline ? 'Online' : event.location}</p>
+                    {!isOnline && pin && (
+                      <a
+                        href={mapUrl(pin.lat, pin.lng)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-1 inline-block text-sm font-semibold text-neutral-950 underline underline-offset-2 transition-colors hover:text-[#e31d25]"
+                      >
+                        Open map &#8599;
+                      </a>
+                    )}
+                  </div>
+
+                  <div>
+                    {ended ? (
+                      <p className="text-sm font-semibold uppercase tracking-[0.15em] text-neutral-400">This event has ended.</p>
+                    ) : (
+                      <ParticipateButton
+                        eventId={event._id}
+                        registrationOpen={event.registrationOpen !== false}
+                        isFull={event.isFull === true}
+                        requireApproval={event.requireApproval === true}
+                        isOnline={isOnline}
+                      />
+                    )}
+                  </div>
                 </div>
               </header>
 
